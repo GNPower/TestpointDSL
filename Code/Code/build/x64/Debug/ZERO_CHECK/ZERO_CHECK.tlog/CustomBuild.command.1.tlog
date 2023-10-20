@@ -1,0 +1,10 @@
+^D:\SCHOOL\GRAD\COURSES\ECE 718 - COMPILER DESIGN FOR HIGH PERFORMANCE COMPUTING\PROJECT\CODE\CODE\BUILD\CMAKEFILES\8659197503A609B0534CB8EBF162C853\GENERATE.STAMP.RULE
+setlocal
+D:\Programs\CMake\bin\cmake.exe "-SD:/School/Grad/Courses/ECE 718 - Compiler Design for High Performance Computing/Project/Code/Code" "-BD:/School/Grad/Courses/ECE 718 - Compiler Design for High Performance Computing/Project/Code/Code/build" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "D:/School/Grad/Courses/ECE 718 - Compiler Design for High Performance Computing/Project/Code/Code/build/hil_dsl.sln"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

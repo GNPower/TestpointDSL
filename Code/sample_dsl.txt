@@ -1,0 +1,29 @@
+# Give the context of the testing plan (metadata for report)
+WITH CONTEXT:
+	NAME = Some Testing Plan Name Here
+	AUTHOR = Graham Power
+
+MATHFUNC convert_pulse (raw) = raw*(3.3/(212))/100/0.05*1E3
+
+# Specify the hardware and how it is connected up to the test board	
+WITH HARDWARE:
+	BK2194 NAMED scope ON usb com4 # Part ID of a B&K oscilliscope
+	SDM3045X NAMED multimeter ON usb com5 # Part id of a Siglent Technologies digital multimeter
+	GPO NAMED trig_pulse ON DIGITAL 3
+	GPI NAMED pulse ON ANALOG 5 USING convert_pulse
+	
+# An always block will run in a loop for the entire duration of the test	
+ALWAYS:
+	LABEL v1 multimeter VOLTAGE
+	ASSERT v1 EQUAL 3.3V TOLERANCE 5%
+	ASSERT WEAK multimeter CURRENT GREATERTHEN 10mA AND LESSTHEN 600mA TOLERANCE 10mA
+	
+CONSTANT E0 = 1.5
+CONSTANT alpha = 0.015
+CONSTANT beta = 0.0056
+MATHFUNC pulse_func (t) = E0*(e^(-alpha*t) - e^(-beta*t))
+	
+SET trig_pulse HIGH
+DELAY UNTIL pulse GREATERTHEN 
+RECORD pulse AS pulse_in FOR 300 ms
+ASSERT pulse_in MATCHES pulse_func TOLERANCE 10%
