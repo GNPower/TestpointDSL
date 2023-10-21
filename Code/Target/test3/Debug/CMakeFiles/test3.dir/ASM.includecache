@@ -1,0 +1,10 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+D:/School/Grad/Courses/ECE 718 - Compiler Design for High Performance Computing/Project/Code/Target/test3/Startup/startup_stm32l452retx.s
+
