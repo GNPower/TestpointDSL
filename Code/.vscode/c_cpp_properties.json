@@ -1,22 +1,17 @@
 {
     "configurations": [
         {
-            "name": "Win32",
+            "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/opt/llvm/build/include",
-                "/opt/llvm/llvm/include",
-                "/home/gnpower/Documents/TestpointDSL/Code/Code"
+                "/usr/include/llvm-14",
+                "/usr/include/llvm-c-14"
             ],
-            "defines": [
-                "_DEBUG",
-                "UNICODE",
-                "_UNICODE"
-            ],
-            "compilerPath": "/usr/bin/g++",
+            "defines": [],
+            "compilerPath": "/usr/bin/clang",
             "cStandard": "c17",
-            "cppStandard": "gnu++14",
-            "intelliSenseMode": "linux-gcc-x64"
+            "cppStandard": "c++14",
+            "intelliSenseMode": "linux-clang-x64"
         }
     ],
     "version": 4

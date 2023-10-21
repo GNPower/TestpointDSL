@@ -2,6 +2,9 @@
     "files.associations": {
         "memory": "cpp",
         "tuple": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "stm32l4xx_hal_def.h": "c",
+        "cstdio": "c",
+        "main.h": "c"
     }
 }
