@@ -2,7 +2,11 @@
 <Configuration status="info">
     <ThresholdFilter level="INFO"/>
     <Appenders>
+<<<<<<< HEAD
         <RollingFile name="DEBUGFILE" fileName="D:/School/Grad/Courses/ECE 718 - Compiler Design for High Performance Computing/Project/Code/Target/.metadata/.ide.log" filePattern="D:/School/Grad/Courses/ECE 718 - Compiler Design for High Performance Computing/Project/Code/Target/.metadata/.ide.log-%d{yyyy-MM-dd}.log">
+=======
+        <RollingFile name="DEBUGFILE" fileName="/home/gnpower/Documents/TestpointDSL/Code/Target/.metadata/.ide.log" filePattern="/home/gnpower/Documents/TestpointDSL/Code/Target/.metadata/.ide.log-%d{yyyy-MM-dd}.log">
+>>>>>>> a3f18581d2ebf7f4d243e6a63121e8f2a41b35d9
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} [%p] %c{1}:%L - %m%n" />
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true" />

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 !SESSION 2023-10-21 17:28:27.494 -----------------------------------------------
 eclipse.buildId=Version 1.13.0
 java.version=17.0.6
@@ -506,6 +507,27 @@ Please upgrade the ST-LINK firmware using the upgrade tool. Reconnect ST-LINK an
 !ENTRY org.eclipse.jface 2 0 2023-10-21 18:28:49.420
 !MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
 !SUBENTRY 1 org.eclipse.jface 2 0 2023-10-21 18:28:49.420
+=======
+!SESSION 2023-10-21 17:52:19.761 -----------------------------------------------
+eclipse.buildId=Version 1.13.2
+java.version=17.0.6
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_CA
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2023-10-21 17:52:38.999
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2023-10-21 17:52:39.001
+!MESSAGE Log4j2 initialized with config file /home/gnpower/Documents/TestpointDSL/Code/Target/.metadata/.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2023-10-21 17:52:44.021
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.jface 2 0 2023-10-21 17:56:14.513
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2023-10-21 17:56:14.513
+>>>>>>> a3f18581d2ebf7f4d243e6a63121e8f2a41b35d9
 !MESSAGE A conflict occurred for CTRL+INSERT:
 Binding(CTRL+INSERT,
 	ParameterizedCommand(Command(org.eclipse.tm.terminal.copy,Copy,
