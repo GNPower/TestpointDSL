@@ -43,8 +43,9 @@ BUILD_DIR = build
 # source
 ######################################
 # C sources
+LLVM_SOURCES = Core/Src/main.c
+
 C_SOURCES =  \
-Core/Src/main.c \
 Core/Src/stm32l4xx_it.c \
 Core/Src/stm32l4xx_hal_msp.c \
 Drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim.c \
@@ -106,7 +107,7 @@ FPU = -mfpu=fpv4-sp-d16
 FLOAT-ABI = -mfloat-abi=hard
 
 # mcu
-ASM_MCU = $(CPU) -mthumb $(FPU) $(FLOAT-ABI)
+GCC_MCU = $(CPU) -mthumb $(FPU) $(FLOAT-ABI)
 LLVM_MCU = --target=thumbv7em-none-none-eabihf
 
 # macros for gcc
@@ -133,20 +134,20 @@ C_INCLUDES =  \
 
 
 # compile gcc flags
-ASFLAGS = $(LLVM_MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
+ASFLAGS = $(GCC_MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 
-CFLAGS += $(LLVM_MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections -fshort-enums
-ASM_CFLAGS += $(ASM_MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
+GCC_CFLAGS += $(GCC_MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
+LLVM_CFLAGS += $(LLVM_MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections -fshort-enums
 
 ifeq ($(DEBUG), 1)
-CFLAGS += -g -gdwarf-2
-ASM_CFLAGS += -g -gdwarf-2
+GCC_CFLAGS += -g -gdwarf-2
+LLVM_CFLAGS += -g -gdwarf-2
 endif
 
 
 # Generate dependency information
-CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
-ASM_CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
+GCC_CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
+LLVM_CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 
 
 #######################################
@@ -158,7 +159,7 @@ LDSCRIPT = STM32L452RETx_FLASH.ld
 # libraries
 LIBS = -lc -lm -lnosys 
 LIBDIR = 
-LDFLAGS = $(ASM_MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
+LDFLAGS = $(GCC_MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 
 # default action: build all
 all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
@@ -174,15 +175,17 @@ vpath %.c $(sort $(dir $(C_SOURCES)))
 OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES:.s=.o)))
 vpath %.s $(sort $(dir $(ASM_SOURCES)))
 
+
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR) 
-	$(CC) -c $(CFLAGS) $< -o $@
+	$(GCC) -c $(GCC_CFLAGS) $< -o $@
 #	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
 
 $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
-	$(AS) -c $(ASM_CFLAGS) $< -o $@
+	$(CC) -c $(GCC_CFLAGS) $< -o $@
+#	$(AS) -c $(ASM_CFLAGS) $< -o $@
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
-	$(GCC) $(OBJECTS) $(LDFLAGS) -o $@
+	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 	$(SZ) $@
 
 $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)

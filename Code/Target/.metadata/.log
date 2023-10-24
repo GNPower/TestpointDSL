@@ -554,6 +554,7 @@ Binding(CTRL+INSERT,
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.ui.console.ConsoleView,,,system)
 
+<<<<<<< HEAD
 !ENTRY org.eclipse.cdt.core 1 0 2023-10-21 19:18:57.191
 !MESSAGE Indexed 'test' (696 sources, 419 headers) in 28.9 sec: 66,764 declarations; 384,676 references; 52 unresolved inclusions; 596 syntax errors; 18,725 unresolved names (4%)
 
@@ -580,3 +581,52 @@ Binding(CTRL+INSERT,
 
 !ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2023-10-21 19:20:15.928
 !MESSAGE Existing sessions are:
+=======
+!ENTRY org.eclipse.core.jobs 4 2 2023-10-21 19:15:58.092
+!MESSAGE An internal error occurred during: "Periodic workspace save.".
+!STACK 0
+java.lang.NumberFormatException: Cannot parse null string
+	at java.base/java.lang.Integer.parseInt(Integer.java:630)
+	at java.base/java.lang.Integer.parseInt(Integer.java:786)
+	at org.eclipse.core.internal.resources.SaveManager.validateMasterTableBeforeSave(SaveManager.java:1615)
+	at org.eclipse.core.internal.resources.SaveManager.saveMasterTable(SaveManager.java:1274)
+	at org.eclipse.core.internal.resources.SaveManager.saveMasterTable(SaveManager.java:1265)
+	at org.eclipse.core.internal.resources.SaveManager.save(SaveManager.java:1238)
+	at org.eclipse.core.internal.resources.SaveManager.save(SaveManager.java:1149)
+	at org.eclipse.core.internal.resources.DelayedSnapshotJob.run(DelayedSnapshotJob.java:51)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.cdt.dsf.gdb 4 5012 2023-10-21 19:16:14.619
+!MESSAGE Could not determine GDB version using command: arm-none-eabi-gdb --version
+!STACK 0
+java.lang.Exception: arm-none-eabi-gdb: error while loading shared libraries: libncurses.so.5: cannot open shared object file: No such file or directory
+
+	at org.eclipse.cdt.dsf.gdb.launching.LaunchUtils.getGDBVersion(LaunchUtils.java:352)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunch.getGDBVersion(GdbLaunch.java:536)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugSession(GdbLaunchDelegate.java:157)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugger(GdbLaunchDelegate.java:109)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launch(GdbLaunchDelegate.java:97)
+	at com.st.stm32cube.ide.mcu.debug.launch.DSFDelegate.launch(DSFDelegate.java:334)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:806)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:717)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin.buildAndLaunch(DebugUIPlugin.java:1040)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin$1.run(DebugUIPlugin.java:1243)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+
+!ENTRY org.eclipse.cdt.core 1 0 2023-10-21 19:16:20.744
+!MESSAGE Indexed 'test' (696 sources, 419 headers) in 20.4 sec: 66,764 declarations; 384,676 references; 52 unresolved inclusions; 596 syntax errors; 18,725 unresolved names (4%)
+
+!ENTRY org.eclipse.core.jobs 4 2 2023-10-21 19:21:00.357
+!MESSAGE An internal error occurred during: "Periodic workspace save.".
+!STACK 0
+java.lang.NumberFormatException: Cannot parse null string
+	at java.base/java.lang.Integer.parseInt(Integer.java:630)
+	at java.base/java.lang.Integer.parseInt(Integer.java:786)
+	at org.eclipse.core.internal.resources.SaveManager.validateMasterTableBeforeSave(SaveManager.java:1615)
+	at org.eclipse.core.internal.resources.SaveManager.saveMasterTable(SaveManager.java:1274)
+	at org.eclipse.core.internal.resources.SaveManager.saveMasterTable(SaveManager.java:1265)
+	at org.eclipse.core.internal.resources.SaveManager.save(SaveManager.java:1238)
+	at org.eclipse.core.internal.resources.SaveManager.save(SaveManager.java:1149)
+	at org.eclipse.core.internal.resources.DelayedSnapshotJob.run(DelayedSnapshotJob.java:51)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+>>>>>>> 88913279c2052d2cbc50bd87c13d001074f687e8
