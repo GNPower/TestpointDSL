@@ -1,0 +1,24 @@
+# Specify the hardware and how it is connected up to the test board	
+WITH HARDWARE:
+	OUTPUT NAMED trig_pulse ON DIGITAL LD4
+	INPUT NAMED pulse ON ANALOG ALG1 USING convert_pulse
+
+WITH CONSTANT:
+	E0 = 1.5
+	alpha = 0.015
+	beta = 0.0056
+
+WITH MATHFUNC:
+	convert_pulse (raw) = raw*(3.3/(212))/100/0.05*1E3
+	pulse_func (t) = E0*(e^(-alpha*t) - e^(-beta*t))
+
+# An always block will run in a loop for the entire duration of the test	
+ALWAYS:
+	ASSERT v1 EQUAL 3.3V TOLERANCE 5%
+	ASSERT WEAK multimeter CURRENT GREATERTHEN 10mA AND LESSTHEN 600mA TOLERANCE 10mA
+
+	
+SET trig_pulse HIGH
+DELAY UNTIL pulse GREATERTHEN 
+RECORD pulse AS pulse_in FOR 300 ms
+ASSERT pulse_in MATCHES pulse_func TOLERANCE 10%
