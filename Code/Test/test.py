@@ -12,7 +12,7 @@ from signals.exponentialpulse import PlotVariousExponentialPulse, PlotVariousDou
 
 from interactive_plot import interactive_plot
 
-from similarityComparison import CompareConstant
+from similarityComparison import CompareConstant, PlotConstant
 
 
 # PlotVariousConstants(interactive_plot)
@@ -31,3 +31,5 @@ from similarityComparison import CompareConstant
 # PlotVariousSpikePulse(interactive_plot, is_neg=True)
 
 CompareConstant()
+
+# PlotConstant("ConstantResults")
