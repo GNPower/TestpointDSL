@@ -52,7 +52,7 @@ import json
 # ComparePWMWave()
 # CompareSawtoothWave()
 # CompareTriangleWave()
-# CompareTrapezoidWave()
+CompareTrapezoidWave()
 
 # PlotConstantComparison("ConstantResults")
 # PlotSineWaveComparison("SineWaveResults")

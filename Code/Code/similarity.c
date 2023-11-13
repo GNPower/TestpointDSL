@@ -3,6 +3,8 @@
 #include "stdint.h"
 #include "stdlib.h"
 #include "float.h"
+#include <time.h>
+#include <math.h>
 
 
 #define min(a,b) \
@@ -518,23 +520,164 @@ double DynamicTimeWarping_123(double * y1, double * y2, unsigned int ylength)
 // DynamicTimeWarping_4: Multithread row and column
 // DynamicTimeWarping_6: Multithread row and column by blocks
 
+#define NUM_IMPLEMENTATIONS     6
+#define MONTECARLO_RUNS         2
+#define NUM_VECSIZES            12 // 12 => 4096
+
+typedef double (*DTW_i)(double * y1, double * y2, unsigned int ylength);
+
+typedef struct {
+    unsigned int vecSizes[NUM_VECSIZES];
+    DTW_i funcs[NUM_IMPLEMENTATIONS];
+    char * funcNames[NUM_IMPLEMENTATIONS];
+    double results[NUM_IMPLEMENTATIONS][NUM_VECSIZES];
+} ExecutionTime_t;
+
+void TimeDTWImplementations(ExecutionTime_t * results);
+void PrintDTWResults(ExecutionTime_t * results);
 
 int main()
 {
-    double a[6] = {10, 11, 12, 13, 14, 15};
-    double b[6] = {0, 0, 1, 2, 3, 4};
+    // double a[6] = {10, 11, 12, 13, 14, 15};
+    // double b[6] = {0, 0, 1, 2, 3, 4};
 
-    double ans  = DynamicTimeWarping(a, b, 6);
-    double ans1 = DynamicTimeWarping_1(a, b, 6);
-    double ans2 = DynamicTimeWarping_2(a, b, 6);
-    double ans3 = DynamicTimeWarping_3(a, b, 6);
-    double ans5 = DynamicTimeWarping_5(a, b, 6);
-    double ans123 = DynamicTimeWarping_123(a, b, 6);
+    // double ans  = DynamicTimeWarping(a, b, 6);
+    // double ans1 = DynamicTimeWarping_1(a, b, 6);
+    // double ans2 = DynamicTimeWarping_2(a, b, 6);
+    // double ans3 = DynamicTimeWarping_3(a, b, 6);
+    // double ans5 = DynamicTimeWarping_5(a, b, 6);
+    // double ans123 = DynamicTimeWarping_123(a, b, 6);
 
-    printf("%10.6f\n", ans);
-    printf("%10.6f\n", ans1);
-    printf("%10.6f\n", ans2);
-    printf("%10.6f\n", ans3);
-    printf("%10.6f\n", ans5);
-    printf("%10.6f\n", ans123);
+    // printf("%10.6f\n", ans);
+    // printf("%10.6f\n", ans1);
+    // printf("%10.6f\n", ans2);
+    // printf("%10.6f\n", ans3);
+    // printf("%10.6f\n", ans5);
+    // printf("%10.6f\n", ans123);
+
+    // CALCULATE EXECUTION TIMES
+    printf("Create results struct...\n");
+    ExecutionTime_t times;
+
+    // Set vecsizes based on 2**i
+    printf("Load VecSizes...\n\t");
+    unsigned int i;
+    for (i = 0; i < NUM_VECSIZES; i++)
+    {
+        times.vecSizes[i] = pow(2, i+1);
+        printf("%d, ", times.vecSizes[i]);
+    }
+    printf("\n");
+
+    printf("Load funcs to time...\n");
+    // Set the functions to time
+    times.funcs[0] = DynamicTimeWarping;
+    times.funcNames[0] = "Original";
+    times.funcs[1] = DynamicTimeWarping_1;
+    times.funcNames[1] = "Swapped Loops";
+    times.funcs[2] = DynamicTimeWarping_2;
+    times.funcNames[2] = "Small Bitwidth";
+    times.funcs[3] = DynamicTimeWarping_3;
+    times.funcNames[3] = "Partial Init";
+    times.funcs[4] = DynamicTimeWarping_5;
+    times.funcNames[4] = "Row/Col Interleave";
+    times.funcs[5] = DynamicTimeWarping_123;
+    times.funcNames[5] = "1&2&3";
+
+    // Call the timing code
+    TimeDTWImplementations(&times);
+
+    // Print the results
+    PrintDTWResults(&times);
+};
+
+
+double drnad()
+{
+    return ( (double)rand() * (100) ) / (double)RAND_MAX;
+};
+
+double gmean(clock_t * befores, clock_t * afters, unsigned int length)
+{
+    double gmean_res;
+    double product = 1;
+    unsigned int i;
+    for (i = 0; i < length; i++)
+    {
+        double diff = (double)(afters[i] - befores[i]);
+        // printf("\t\t\tBefore: %d  Aftter: %d   Diff: %f\n", befores[i], afters[i], diff);
+        if (diff > 0)
+        {
+            product = product * diff;
+        }        
+    }
+    gmean_res = round(pow(product, 1./length));
+    // printf("\t\t\tGMean: %f\n", gmean_res);
+    return gmean_res;
+};
+
+void TimeDTWImplementations(ExecutionTime_t * results)
+{
+    printf("Beggining DTW Timing...\n");
+    unsigned int i, j, k;
+
+    // // Create random input vectors
+    double * veca = malloc(results->vecSizes[NUM_VECSIZES-1] * sizeof(double));
+    double * vecb = malloc(results->vecSizes[NUM_VECSIZES-1] * sizeof(double));
+    for (i = 0; i < results->vecSizes[NUM_VECSIZES-1]; i++)
+    {
+        veca[i] = drnad();
+        vecb[i] = drnad();
+    }
+
+    // Get timing results
+    clock_t before[MONTECARLO_RUNS];
+    clock_t after[MONTECARLO_RUNS];
+    for (i = 0; i < NUM_VECSIZES; i++)
+    {
+        printf("\tVecsize: %d of %d\n", i+1, NUM_VECSIZES);
+        for (j = 0; j < NUM_IMPLEMENTATIONS; j++)
+        {
+            printf("\t\tImpl: %d of %d\n", j+1, NUM_IMPLEMENTATIONS);
+            for (k = 0; k <  MONTECARLO_RUNS; k++)
+            {
+                printf("\t\t\tMonteCarlo: %d of %d\n", k+1, MONTECARLO_RUNS);
+                before[k] = clock();
+                results->funcs[j](veca, vecb, results->vecSizes[i]);
+                after[k] = clock();
+                // printf("\t\t\t\tBefore: %d  After: %d\n", before[k], after[k]);
+            }
+            results->results[j][i] = gmean(before, after, MONTECARLO_RUNS);
+            // printf("\t\t\tGMean2: %f\n", results->results[j][i]);
+        }
+    }
+    printf("\n\n\n");
+};
+
+void PrintDTWResults(ExecutionTime_t * results)
+{
+    printf("Timing Results:\n\n");
+    unsigned int i, j;
+
+    printf("Clocks Per Second: %d\n\n", CLOCKS_PER_SEC);
+
+    // Print Header
+    printf("Vector Size, ");
+    for (i = 0; i < NUM_IMPLEMENTATIONS; i++)
+    {
+        printf("%s, ", results->funcNames[i]);
+    }
+    printf("\n");
+
+    // Print Data
+    for (i = 0; i < NUM_VECSIZES; i++)
+    {
+        printf("%d, ", results->vecSizes[i]);
+        for (j = 0; j < NUM_IMPLEMENTATIONS; j++)
+        {
+            printf("%f, ", results->results[j][i]);
+        }
+        printf("\n");
+    }
+    printf("\n\n\n");
 };
