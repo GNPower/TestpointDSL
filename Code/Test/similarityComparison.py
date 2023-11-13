@@ -19,6 +19,7 @@ from interactive_plot import interactive_plot
 
 
 def CompareConstant():
+    print("Comparing Constant...")
     func = Constant(1)
     
     exact = func.getf_Exact()
@@ -110,6 +111,7 @@ def PlotConstantComparison(filename: str):
 
 
 def CompareSineWave():
+    print("Comparing Sine Wave...")
     func = SineWave()
     CompareWaveGeneric(func, "SineWave", num_xaxis=100, shift_std=0.1)
 
@@ -119,6 +121,7 @@ def PlotSineWaveComparison(filename: str):
 
 
 def ComparePWMWave():
+    print("Comparing PWM Wave...")
     func = PWMWave()
     CompareWaveGeneric(func, "PWMWave", num_xaxis=100, shift_std=0.1)
 
@@ -128,6 +131,7 @@ def PlotPWMWaveComparison(filename: str):
 
 
 def CompareSawtoothWave():
+    print("Comparing Sawtooth Wave...")
     func = SawtoothWave()
     CompareWaveGeneric(func, "SawtoothWave", num_xaxis=100, shift_std=0.1)
 
@@ -137,6 +141,7 @@ def PlotSawtoothWaveComparison(filename: str):
 
 
 def CompareTriangleWave():
+    print("Comparing Triangle...")
     func = TriangleWave()
     CompareWaveGeneric(func, "TriangleWave", num_xaxis=100, shift_std=0.1)
 
@@ -146,6 +151,7 @@ def PlotTriangleWaveComparison(filename: str):
 
 
 def CompareTrapezoidWave():
+    print("Comparing Trapezoid Wave...")
     func = TrapezoidWave()
     CompareWaveGeneric(func, "TrapezoidWave", num_xaxis=100, shift_std=0.1)
 
@@ -155,6 +161,7 @@ def PlotTrapezoidWaveComparison(filename: str):
 
 
 def CompareExponentialPulse():
+    print("Comparing Exponential Pulse...")
     func = ExponentialPulse()
     # TODO: Fix this
     CompareWaveGeneric(func, "ExponentialPulse", num_xaxis=100, shift_std=0.1)
