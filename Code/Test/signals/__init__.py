@@ -40,13 +40,13 @@ class Signal(ABC):
         return [ 
             self.evaluate(self.x[i-delay]) 
             if i > delay 
-            else self.evaluate(self.x[0]) 
+            else self.evaluate(self.x[-delay+i])
             for i in range(len(self.x)) 
         ]
     
     def getf_Early(self, early: int = 1):
         return [
-            self.evaluate(self.x[-1])
+            self.evaluate(self.x[(i+early)%len(self.x)])
             if i >= len(self.x) - early
             else self.evaluate(self.x[i+early])
             for i in range(len(self.x))
@@ -58,7 +58,7 @@ class Signal(ABC):
         return [ 
             self.evaluate(self.x[i-delay]+noisex[i])+noisey[i] 
             if i > delay 
-            else self.evaluate(self.x[0]+noisex[i])+noisey[i] 
+            else self.evaluate(self.x[-delay+i]+noisex[i])+noisey[i] 
             for i in range(len(self.x)) 
         ]
     
@@ -66,7 +66,7 @@ class Signal(ABC):
         noisex = self.noise(std)
         noisey = self.noise(std)
         return [
-            self.evaluate(self.x[-1]+noisex[i])+noisey[i]
+            self.evaluate(self.x[(i+early)%len(self.x)]+noisex[i])+noisey[i]
             if i >= len(self.x) - early
             else self.evaluate(self.x[i+early]+noisex[i])+noisey[i]
             for i in range(len(self.x))

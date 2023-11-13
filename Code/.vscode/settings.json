@@ -5,6 +5,9 @@
         "xutility": "cpp",
         "stm32l4xx_hal_def.h": "c",
         "cstdio": "c",
-        "main.h": "c"
+        "main.h": "c",
+        "stdio.h": "c",
+        "stdlib.h": "c",
+        "float.h": "c"
     }
 }

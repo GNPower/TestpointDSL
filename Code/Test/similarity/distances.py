@@ -28,12 +28,18 @@ def DynamicTimeWarping(y1: list, y2: list) -> float:
             cost_matrix[i, j] = np.inf
     cost_matrix[0, 0] = 0
 
+    # print("Initial Cost")
+    # print(cost_matrix)
+
     for i in range(1, l_s_1+1):
         for j in range(1, l_s_2+1):
             cost = abs(y1[i-1] - y2[j-1])
             #take last min from the window
             prev_min = np.min([cost_matrix[i-1, j], cost_matrix[i, j-1], cost_matrix[i-1, j-1]])
             cost_matrix[i, j] = cost + prev_min
+
+    # print("Populated Cost")
+    # print(cost_matrix)
 
     # Walk the cost matrix
     walk = []

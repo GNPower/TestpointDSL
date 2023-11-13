@@ -1,9 +1,36 @@
 import numpy as np
 
+from .errors import MeanSquaredError
 
-def CrossCorrelation(y1: list, y2: list) -> float:
-    corr = np.correlate(y1, y2)
-    return np.max(corr)
+
+def CrossCorrelation(x: list, y1: list, y2: list) -> float:
+    corr = np.correlate(y1, y2, mode="full")
+    cx = np.linspace(-x[-1], x[-1], 2*len(x)-1)
+    ndx = np.argmax(corr)
+    shift = (int)(cx[ndx]/(abs(x[1]-x[0])))
+    new_y2 = y2[-shift:] + y2[:-shift]
+    return MeanSquaredError(y1, new_y2)
+
+
+def CrossCorrelation2(x: list, y1: list, y2: list) -> float:
+    # This same as np.correlate
+    clen=  len(y1)
+    corr = np.zeros(2*len(y1) - 1)
+    cindx = 0
+    for i in range(clen-1,-clen,-1):
+        dotp = 0
+        for j in range(clen):
+            s2 = (i+j)
+            if s2 < clen and s2 >= 0: 
+                dotp += y1[j]*y2[s2]
+        corr[cindx] = dotp
+        cindx += 1
+    # Now do the rest
+    cx = np.linspace(-x[-1], x[-1], 2*len(x)-1)
+    ndx = np.argmax(corr)
+    shift = (int)(cx[ndx]/(abs(x[1]-x[0])))
+    new_y2 = y2[-shift:] + y2[:-shift]
+    return MeanSquaredError(y1, new_y2)
 
 
 def Pipe(y1: list, y2: list, pipe_range: float = 0.1, pipe_type: bool = False) -> bool:

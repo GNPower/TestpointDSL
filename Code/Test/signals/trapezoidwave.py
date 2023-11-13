@@ -78,7 +78,7 @@ class TrapezoidWave(Signal):
     def evaluate(self, x: float):
         ramp_section = (self.period*self.duty_cycle) * (1 - self.flat_top) / 2
         flattop_section = (self.period*self.duty_cycle) * self.flat_top
-        return (
+        return (float)(
             self.amplitude*2 # Scale to amplitude
             *( 
                 (x % self.period)/(self.period*self.duty_cycle*(1-self.flat_top)) # ramp up 0->1

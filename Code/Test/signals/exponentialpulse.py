@@ -165,13 +165,16 @@ class DoubleExponentialPulse(Signal):
         self.k = exp(-alpha * ( (log(alpha) - log(self.beta)) / (alpha - self.beta) )) - exp(-self.beta * ((log(alpha) - log(self.beta)) / (alpha - self.beta) ))
 
     def evaluate(self, x: float):
-        val = (
-            self.E0*self.k*(exp(-self.alpha*x) - exp(-self.beta*x))
-            + (
-                ( 1 / (1 + exp(-0.75*(x-self.pulse2_delay))) )
-                *self.pulse2_rel_E0*self.E0*self.k*(exp(-self.alpha*(x-self.pulse2_delay)) - exp(-self.beta*(x-self.pulse2_delay)))
-            )
-        )
+        # val = (
+        #     self.E0*self.k*(exp(-self.alpha*x) - exp(-self.beta*x))
+        #     + (
+        #         ( 1 / (1 + exp(-0.75*(x-self.pulse2_delay))) )
+        #         *self.pulse2_rel_E0*self.E0*self.k*(exp(-self.alpha*(x-self.pulse2_delay)) - exp(-self.beta*(x-self.pulse2_delay)))
+        #     )
+        # )
+        val = self.E0*self.k*(exp(-self.alpha*x) - exp(-self.beta*x))
+        if x > self.pulse2_delay:
+            val += self.pulse2_rel_E0*self.E0*self.k*(exp(-self.alpha*(x-self.pulse2_delay)) - exp(-self.beta*(x-self.pulse2_delay)))
         if self.is_neg:
             return 0 - val
         return val

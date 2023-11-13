@@ -74,7 +74,7 @@ class TriangleWave(Signal):
         self.duty_cycle = duty_cycle
 
     def evaluate(self, x: float):
-        return (
+        return (float)(
         self.amplitude*2 # Scale to amplitude
         *( 
             (x % self.period)/(self.period*self.duty_cycle) # ramp up 0->1

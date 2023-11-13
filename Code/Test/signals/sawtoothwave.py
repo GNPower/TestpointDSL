@@ -74,4 +74,4 @@ class SawtoothWave(Signal):
         self.duty_cycle = duty_cycle
 
     def evaluate(self, x: float):
-        return self.amplitude*(x % self.period)/(self.period*self.duty_cycle)*(x % self.period < self.period * self.duty_cycle)
+        return (float)(self.amplitude*(x % self.period)/(self.period*self.duty_cycle)*(x % self.period < self.period * self.duty_cycle))
