@@ -55,6 +55,17 @@ def PlotVariousExponentialPulse(
     fig, ax, leg = plot_call_func(x, y_list, label_list)
     plt.show()
 
+    e1 = ExponentialPulse(alpha=0.1, beta_over_alpha=10.001)
+    x = e1.get_x()
+    e1s = e1.getf_Exact()
+    e2 = ExponentialPulse(alpha=0.3, beta_over_alpha=10.001)
+    e2s = e2.getf_Exact()
+    e3 = ExponentialPulse(alpha=0.5, beta_over_alpha=10.001)
+    e3s = e3.getf_Exact()
+
+    fig1, ax1, leg1 = plot_call_func(x, [e1s, e2s, e3s], ["alpha=0.1", "alpha=0.3", "alpha=0.5"])
+    plt.show()
+    
 
 
 

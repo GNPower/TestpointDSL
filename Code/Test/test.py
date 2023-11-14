@@ -32,6 +32,14 @@ from similarityComparison import NormalizeGeneric
 
 import json
 
+###################################################
+#
+# PLOT VARIOUS SIGNALS:
+#
+# Uncomment one to view an interactive graph
+#
+###################################################
+
 # PlotVariousConstants(interactive_plot)
 # PlotVariousSineWave(interactive_plot)
 # PlotVariousPWMWave(interactive_plot)
@@ -42,61 +50,41 @@ import json
 # PlotVariousExponentialPulse(interactive_plot, is_neg=True)
 # PlotVariousDoubleExponentialPulse(interactive_plot, is_neg=False)
 # PlotVariousDoubleExponentialPulse(interactive_plot, is_neg=True)
-# PlotVariousInvertingExponentialPulse(interactive_plot, is_neg=False)
+# PlotVariousInvertingExponentialPulse(interactive_plot, is_neg=FalsWe)
 # PlotVariousInvertingExponentialPulse(interactive_plot, is_neg=True)
 # PlotVariousSpikePulse(interactive_plot, is_neg=False)
 # PlotVariousSpikePulse(interactive_plot, is_neg=True)
 
+###################################################
+#
+# COMPARE VARIOUS SIGNALS:
+#
+# Uncomment one to generate comparison results for
+# a signal. NOTE: these comparisons can take 
+# upwards of an hour.
+#
+###################################################
+
 # CompareConstant()
 # CompareSineWave()
 # ComparePWMWave()
-CompareSawtoothWave()
+# CompareSawtoothWave()
 # CompareTriangleWave()
 # CompareTrapezoidWave()
 # CompareExponentialPulse()
 
-PlotConstantComparison("ConstantResults")
+###################################################
+#
+# PLOT VARIOUS COMPARISONS:
+#
+# Uncomment one to view an interactive graph
+#
+###################################################
+
+# PlotConstantComparison("ConstantResults")
 # PlotSineWaveComparison("SineWaveResults")
 # PlotPWMWaveComparison("PWMWaveResults")
 # PlotSawtoothWaveComparison("SawtoothWaveResults")
 # PlotTriangleWaveComparison("TriangleWaveResults")
 # PlotTrapezoidWaveComparison("TrapezoidWaveResults")
 # PlotExponentialPulseComparison("ExponentialPulseResults")
-
-
-
-
-
-# pulse_list = []
-# epulse_list = []
-# for i in range(10):
-#     e = ExponentialPulse(alpha=(10-i)/10, beta_over_alpha=10.001)
-#     x = e.get_x()
-#     epulse_list.append(e.getf_Exact())
-#     d = DoubleExponentialPulse(alpha=0.1, beta_over_alpha=10.001, pulse2_delay=20, pulse2_rel_E0=i*0.1)
-#     pulse_list.append(d.getf_Exact())
-
-# # x = pulse_list[0].get_x()
-
-# fig2, ax2, leg2 = interactive_plot(x, pulse_list, ["ds1", "ds2", "ds3", "ds4", "ds5", "ds6", "ds7", "ds8", "ds9", "ds10"])
-# plt.show()
-
-# es_mse = [MeanSquaredError(epulse_list[0], epulse_list[i]) for i in range(10)]
-# es_dtw = [DynamicTimeWarping(epulse_list[0], epulse_list[i]) for i in range(10)]
-
-# t2 = range(10)
-# ds_mse = [MeanAbsoluteError(pulse_list[0], pulse_list[i]) for i in range(10)]
-# ds_dtw = [DynamicTimeWarping(pulse_list[0], pulse_list[i]) for i in range(10)]
-
-
-# fig3, ax3, leg3 = interactive_plot(t2, [es_mse, es_dtw], ["es_mse", "es_dtw"])
-# plt.show()
-
-# fig4, ax4, leg4 = interactive_plot(t2, [ds_mse, ds_dtw], ["ds_mse", "ds_dtw"])
-# plt.show()
-
-# fig5, ax5, leg5 = interactive_plot(t2, [es_mse, ds_mse], ["es_mse", "ds_mse"])
-# plt.show()
-
-# fig4, ax4, leg4 = interactive_plot(t2, [es_dtw, ds_dtw], ["es_dtw", "ds_dtw"])
-# plt.show()

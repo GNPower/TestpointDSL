@@ -1,5 +1,0 @@
-.vscode/
-build/
-.vscode/.cortex-debug.peripherals.state.json
-.cache
-debug-files/*jdebug.user
