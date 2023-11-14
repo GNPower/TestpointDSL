@@ -50,7 +50,7 @@ import json
 # CompareConstant()
 # CompareSineWave()
 # ComparePWMWave()
-# CompareSawtoothWave()
+CompareSawtoothWave()
 # CompareTriangleWave()
 # CompareTrapezoidWave()
 
