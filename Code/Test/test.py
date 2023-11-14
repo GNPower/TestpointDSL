@@ -13,7 +13,7 @@ from signals.exponentialpulse import PlotVariousExponentialPulse, PlotVariousDou
 
 from interactive_plot import interactive_plot
 
-from similarityComparison import CompareConstant, PlotConstantComparison, CompareSineWave, PlotSineWaveComparison, ComparePWMWave, PlotPWMWaveComparison, CompareSawtoothWave, PlotSawtoothWaveComparison, CompareTriangleWave, PlotTriangleWaveComparison, CompareTrapezoidWave, PlotTrapezoidWaveComparison
+from similarityComparison import CompareConstant, PlotConstantComparison, CompareSineWave, PlotSineWaveComparison, ComparePWMWave, PlotPWMWaveComparison, CompareSawtoothWave, PlotSawtoothWaveComparison, CompareTriangleWave, PlotTriangleWaveComparison, CompareTrapezoidWave, PlotTrapezoidWaveComparison, CompareExponentialPulse, PlotExponentialPulseComparison
 
 from similarity.errors import MeanSquaredError, RootMeanSquaredError, MeanAbsoluteError
 from similarity.distances import FrechetDist, EuclidianDistance, DynamicTimeWarping
@@ -52,15 +52,16 @@ import json
 # ComparePWMWave()
 # CompareSawtoothWave()
 # CompareTriangleWave()
-CompareTrapezoidWave()
+# CompareTrapezoidWave()
+# CompareExponentialPulse()
 
-# PlotConstantComparison("ConstantResults")
+PlotConstantComparison("ConstantResults")
 # PlotSineWaveComparison("SineWaveResults")
 # PlotPWMWaveComparison("PWMWaveResults")
 # PlotSawtoothWaveComparison("SawtoothWaveResults")
 # PlotTriangleWaveComparison("TriangleWaveResults")
 # PlotTrapezoidWaveComparison("TrapezoidWaveResults")
-
+# PlotExponentialPulseComparison("ExponentialPulseResults")
 
 
 
@@ -70,11 +71,12 @@ CompareTrapezoidWave()
 # epulse_list = []
 # for i in range(10):
 #     e = ExponentialPulse(alpha=(10-i)/10, beta_over_alpha=10.001)
+#     x = e.get_x()
 #     epulse_list.append(e.getf_Exact())
 #     d = DoubleExponentialPulse(alpha=0.1, beta_over_alpha=10.001, pulse2_delay=20, pulse2_rel_E0=i*0.1)
 #     pulse_list.append(d.getf_Exact())
 
-# x = pulse_list[0].get_x()
+# # x = pulse_list[0].get_x()
 
 # fig2, ax2, leg2 = interactive_plot(x, pulse_list, ["ds1", "ds2", "ds3", "ds4", "ds5", "ds6", "ds7", "ds8", "ds9", "ds10"])
 # plt.show()

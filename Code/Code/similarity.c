@@ -12,6 +12,11 @@
         __typeof__ (b) _b = (b); \
         _a < _b ? _a : _b; })
 
+#define max(a,b) \
+    ({  __typeof__ (a) _a = (a); \
+        __typeof__ (b) _b = (b); \
+        _a > _b ? _a : _b; })
+
 uint8_t Pipe_Abs(int * y1, int * y2, unsigned int ylength, double pipe_range)
 {
     int max, min;
@@ -154,6 +159,7 @@ double DynamicTimeWarping(double * y1, double * y2, unsigned int ylength)
     }
     cost += cost_matrix[(l_i)*mat_l + l_j];
 
+    free(cost_matrix);
     return cost;
 };
 
@@ -222,6 +228,7 @@ double DynamicTimeWarping_1(double * y1, double * y2, unsigned int ylength)
     }
     cost += cost_matrix[(l_i)*mat_l + l_j];
 
+    free(cost_matrix);
     return cost;
 };
 
@@ -291,6 +298,7 @@ double DynamicTimeWarping_2(double * y1, double * y2, unsigned int ylength)
     }
     cost += cost_matrix[(l_i)*mat_l + l_j];
 
+    free(cost_matrix);
     return cost;
 };
 
@@ -358,6 +366,7 @@ double DynamicTimeWarping_3(double * y1, double * y2, unsigned int ylength)
     }
     cost += cost_matrix[(l_i)*mat_l + l_j];
 
+    free(cost_matrix);
     return cost;
 };
 
@@ -441,6 +450,78 @@ double DynamicTimeWarping_5(double * y1, double * y2, unsigned int ylength)
     }
     cost += cost_matrix[ij2k(ylength, l_i, l_j)];
 
+    free(cost_matrix);
+    return cost;
+};
+
+
+// Limit W
+double DynamicTimeWarping_6(double * y1, double * y2, unsigned int ylength)
+{
+    unsigned int i, j;
+    unsigned int mat_l = ylength + 1;
+    // Initialize cost matrix
+    double * cost_matrix = malloc(mat_l * mat_l * sizeof(double));
+    for (i = 0; i < mat_l; i++)
+    {
+        for (j = 0; j < mat_l; j++)
+        {
+            cost_matrix[(i)*mat_l + j] = DBL_MAX;
+        }
+    }
+    cost_matrix[0] = 0;
+
+    // Calculate the cost matrix
+    double cost, prev_min;
+    unsigned int w = 20;
+    for (i = 1; i < mat_l; i++)
+    {
+        for (j = max(2, i-w); j < min(ylength+1, i+w); j++)
+        {
+            cost = abs(y1[i-1] - y2[j-1]);
+            // Take the last min from the window
+            prev_min = min(cost_matrix[(i-1)*mat_l + j], cost_matrix[(i)*mat_l + j-1]);
+            prev_min = min(prev_min, cost_matrix[(i-1)*mat_l + j-1]);
+            cost_matrix[(i)*mat_l + j] = cost + prev_min;
+        }
+    }
+
+    // Walk the cost matrix
+    cost = 0;
+    int l_i = ylength;
+    int l_j = ylength;
+    double mi, mj, mij;
+    while(l_i > 0 && l_j > 0)
+    {
+        cost += cost_matrix[(l_i)*mat_l + l_j];
+        if (l_i > 0) {
+            mi = cost_matrix[(l_i-1)*mat_l + l_j];
+        } else {
+            mi = DBL_MAX;
+        }
+        if (l_j > 0) {
+            mj = cost_matrix[(l_i)*mat_l + l_j-1];
+        } else {
+            mj = DBL_MAX;
+        }
+        if (l_i > 0 && l_j > 0) {
+            mij = cost_matrix[(l_i-1)*mat_l + l_j-1];
+        } else {
+            mij = DBL_MAX;
+        }
+        
+        if (mi <= mj && mi <= mij) {
+            l_i--;
+        } else if (mj <= mi && mj <= mij) {
+            l_j--;
+        } else {
+            l_i--;
+            l_j--;
+        }
+    }
+    cost += cost_matrix[(l_i)*mat_l + l_j];
+
+    free(cost_matrix);
     return cost;
 };
 
@@ -508,6 +589,76 @@ double DynamicTimeWarping_123(double * y1, double * y2, unsigned int ylength)
     }
     cost += cost_matrix[(l_i)*mat_l + l_j];
 
+    free(cost_matrix);
+    return cost;
+};
+
+
+// All 2,3,6 at the same time
+double DynamicTimeWarping_236(double * y1, double * y2, unsigned int ylength)
+{
+    unsigned int i, j;
+    unsigned int mat_l = ylength + 1;
+    // Initialize cost matrix
+    float * cost_matrix = malloc(mat_l * mat_l * sizeof(float));
+    for (i = 1; i < mat_l; i++)
+    {
+        cost_matrix[(0)*mat_l + i] = FLT_MAX;
+        cost_matrix[(i)*mat_l + 0] = FLT_MAX;
+    }
+    cost_matrix[0] = 0;
+
+    // Calculate the cost matrix
+    float cost, prev_min;
+    unsigned int w = 20;
+    for (i = 1; i < mat_l; i++)
+    {
+        for (j = max(2, i-w); j < min(ylength+1, i+w); j++)
+        {
+            cost = abs(y1[i-1] - y2[j-1]);
+            // Take the last min from the window
+            prev_min = min(cost_matrix[(i-1)*mat_l + j], cost_matrix[(i)*mat_l + j-1]);
+            prev_min = min(prev_min, cost_matrix[(i-1)*mat_l + j-1]);
+            cost_matrix[(i)*mat_l + j] = cost + prev_min;
+        }
+    }
+
+    // Walk the cost matrix
+    cost = 0;
+    int l_i = ylength;
+    int l_j = ylength;
+    float mi, mj, mij;
+    while(l_i > 0 && l_j > 0)
+    {
+        cost += cost_matrix[(l_i)*mat_l + l_j];
+        if (l_i > 0) {
+            mi = cost_matrix[(l_i-1)*mat_l + l_j];
+        } else {
+            mi = FLT_MAX;
+        }
+        if (l_j > 0) {
+            mj = cost_matrix[(l_i)*mat_l + l_j-1];
+        } else {
+            mj = FLT_MAX;
+        }
+        if (l_i > 0 && l_j > 0) {
+            mij = cost_matrix[(l_i-1)*mat_l + l_j-1];
+        } else {
+            mij = FLT_MAX;
+        }
+        
+        if (mi <= mj && mi <= mij) {
+            l_i--;
+        } else if (mj <= mi && mj <= mij) {
+            l_j--;
+        } else {
+            l_i--;
+            l_j--;
+        }
+    }
+    cost += cost_matrix[(l_i)*mat_l + l_j];
+
+    free(cost_matrix);
     return cost;
 };
 
@@ -516,13 +667,14 @@ double DynamicTimeWarping_123(double * y1, double * y2, unsigned int ylength)
 // DynamicTimeWarping_2: Reduce double bit width
 // DynamicTimeWarping_3: Initialize loop not completely needed
 // DynamicTimeWarping_5: Store matrix row/column interleaved
+// DynamicTimeWarping_6: Limit warping
 // TODO:
 // DynamicTimeWarping_4: Multithread row and column
 // DynamicTimeWarping_6: Multithread row and column by blocks
 
-#define NUM_IMPLEMENTATIONS     6
-#define MONTECARLO_RUNS         2
-#define NUM_VECSIZES            12 // 12 => 4096
+#define NUM_IMPLEMENTATIONS     8
+#define MONTECARLO_RUNS         10
+#define NUM_VECSIZES            14 // 12 => 4096
 
 typedef double (*DTW_i)(double * y1, double * y2, unsigned int ylength);
 
@@ -583,6 +735,10 @@ int main()
     times.funcNames[4] = "Row/Col Interleave";
     times.funcs[5] = DynamicTimeWarping_123;
     times.funcNames[5] = "1&2&3";
+    times.funcs[6] = DynamicTimeWarping_6;
+    times.funcNames[6] = "Limit Warping";
+    times.funcs[7] = DynamicTimeWarping_236;
+    times.funcNames[7] = "2&3&6";
 
     // Call the timing code
     TimeDTWImplementations(&times);
@@ -651,6 +807,9 @@ void TimeDTWImplementations(ExecutionTime_t * results)
             // printf("\t\t\tGMean2: %f\n", results->results[j][i]);
         }
     }
+
+    free(veca);
+    free(vecb);
     printf("\n\n\n");
 };
 

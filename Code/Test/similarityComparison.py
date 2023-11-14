@@ -163,12 +163,78 @@ def PlotTrapezoidWaveComparison(filename: str):
 def CompareExponentialPulse():
     print("Comparing Exponential Pulse...")
     func = ExponentialPulse()
-    # TODO: Fix this
-    CompareWaveGeneric(func, "ExponentialPulse", num_xaxis=100, shift_std=0.1)
+    # Get the generic input to compare used by all signals
+    num_xaxis = 100
+    shift_std = 0.1
+    std_list = np.linspace(0.05, 2, num_xaxis).tolist()
+    shift_list, custom_shift_list, custom_shift_names = GenShiftGeneric(func, shift_std, num_xaxis)
+
+    pulse_list = []
+    epulse_list = []
+    for i in range(10):
+        e = ExponentialPulse(alpha=(10-i)/10, beta_over_alpha=10.001)
+        x = e.get_x()
+        epulse_list.append(e.getf_Exact())
+        d = DoubleExponentialPulse(alpha=0.1, beta_over_alpha=10.001, pulse2_delay=20, pulse2_rel_E0=i*0.1)
+        pulse_list.append(d.getf_Exact())
+
+    # x = pulse_list[0].get_x()
+
+    # fig2, ax2, leg2 = interactive_plot(x, pulse_list, ["ds1", "ds2", "ds3", "ds4", "ds5", "ds6", "ds7", "ds8", "ds9", "ds10"])
+    # plt.show()
+
+    es_mse = [MeanSquaredError(epulse_list[0], epulse_list[i]) for i in range(10)]
+    es_dtw = [DynamicTimeWarping(epulse_list[0], epulse_list[i]) for i in range(10)]
+
+    t2 = [i for i in range(10)]
+    ds_mse = [MeanAbsoluteError(pulse_list[0], pulse_list[i]) for i in range(10)]
+    ds_dtw = [DynamicTimeWarping(pulse_list[0], pulse_list[i]) for i in range(10)]
+
+
+    # Get generic comparison results
+    print("Calculating Generic Results")
+    results = CompareGeneric(func, std_list, std_func_lists = custom_shift_list, std_func_names = custom_shift_names)
+    # Add custom results
+    results["shift_std"] = shift_std
+    results["shift_list"] = shift_list
+    results["pulse_list"] = pulse_list
+    results["epulse_list"] = epulse_list
+    results["exp_comp_x"] = t2
+    results["es_mse"] = es_mse
+    results["es_dtw"] = es_dtw
+    results["ds_mse"] = ds_mse
+    results["ds_dtw"] = ds_dtw
+
+    # Write results
+    SaveGeneric(f"ExponentialPulseResults", results)
 
 
 def PlotExponentialPulseComparison(filename: str):
+    data = LoadGeneric(filename)
     PlotComparisonGeneric(filename, "Exponential Pulse")
+
+    fig2, ax2, leg2 = interactive_plot(data["x"], data["pulse_list"], ["ds1", "ds2", "ds3", "ds4", "ds5", "ds6", "ds7", "ds8", "ds9", "ds10"])
+    plt.show()
+
+    fig3, ax3, leg3 = interactive_plot(data["exp_comp_x"], [data["es_mse"], data["es_dtw"]], ["es_mse", "es_dtw"])
+    plt.title("Absolute MSE vs. DTW Comparison for Single Exponential Pulse")
+    plt.xlabel("=> decreasing alpha => longer falloff")
+    plt.show()
+
+    fig4, ax4, leg4 = interactive_plot(data["exp_comp_x"], [data["ds_mse"], data["ds_dtw"]], ["ds_mse", "ds_dtw"])
+    plt.title("Absolute MSE vs. DTW Comparison for Double Exponential Pulse")
+    plt.xlabel("=> pulse 2 relative height increase")
+    plt.show()
+
+    fig5, ax5, leg5 = interactive_plot(data["exp_comp_x"], [data["es_mse"], data["ds_mse"]], ["es_mse", "ds_mse"])
+    plt.title("Absolute Single vs. Double Exponential Pulse Comparison for MSE")
+    plt.xlabel("=> decreasing alpha & increasing pulse2 relative height => longer falloff & larger pulse 2")
+    plt.show()
+
+    fig4, ax4, leg4 = interactive_plot(data["exp_comp_x"], [data["es_dtw"], data["ds_dtw"]], ["es_dtw", "ds_dtw"])
+    plt.title("Absolute Single vs. Double Exponential Pulse Comparison for DTW")
+    plt.xlabel("=> decreasing alpha & increasing pulse2 relative height => longer falloff & larger pulse 2")
+    plt.show()
 
 
 # def CompareDoubleExponentialPulse():
