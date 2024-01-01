@@ -1,0 +1,3 @@
+/gpfs/fs0/scratch/k/kazem/gnpower/Code/build/CMakeFiles/rebuild_cache.dir
+/gpfs/fs0/scratch/k/kazem/gnpower/Code/build/CMakeFiles/plotgen.dir
+/gpfs/fs0/scratch/k/kazem/gnpower/Code/build/CMakeFiles/edit_cache.dir

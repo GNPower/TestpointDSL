@@ -1,0 +1,4 @@
+CONSTANT beta = 0.0056-alpha*t
+CONTEXT NAME = Some Testing Plan Name Here
+HARDWARE GPO NAMED trig_pulse ON DIGITAL 3 # this is a comment
+HARDWARE GPI NAMED pulse ON ANALOG 5 USING convert_pulse

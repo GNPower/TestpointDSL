@@ -1,0 +1,21 @@
+Program(
+	body: [
+		VaribaleDeclaration(
+			identifier: beta,
+			constant: True,
+			value: BinaryExpression(
+				left: NumericLiteral( value: 0.0056 ),
+				right: BinaryExpression(
+					left: Identifier( symbol: "alpha" ),
+					right: Identifier( symbol: "t" ),
+					operator: *
+				),
+				operator: -
+			)
+		),
+		AssignmentExpression(
+			assignee: ContextIdentifier( symbol: "CONTEXT.NAME" ),
+			value: StringArrayLiteral( value: ['Some', 'Testing', 'Plan', 'Name', 'Here'] )
+		),
+	]
+)

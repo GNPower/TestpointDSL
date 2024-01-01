@@ -1,0 +1,2 @@
+Original, Swapped Loops, Small Bitwidth, Partial Init, Thread Row/Col, Interleave, Limit Warping, Memoization, Early Abandon, Pruned, 1NN Euclid (Not DTW), 
+0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03, 0.0133333, 0.03, 0.0133333, 0.12, 

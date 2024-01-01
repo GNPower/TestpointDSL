@@ -1,0 +1,90 @@
+# WITH keyword specifies a block in which everything inside it is of the same type
+# usefull for declaring many of the same types of things
+
+
+# Give the context of the testing plan (metadata for report)
+WITH CONTEXT:
+	NAME = Some Testing Plan Name Here
+	AUTHOR = Graham Power
+END
+
+
+# Specify the hardware and how it is connected up to the test board	
+WITH HARDWARE:
+	# Every hardware definition has the following
+	# A package name: used by the compiler to determine which library functions to use
+	# A name: preceded by the NAME keyword, gives a name to the variable
+	# A protocol: preceded by the ON keyword, gives the communication protocol to use, only when the package library supports multiple protocols
+	# A pin(s): preceded by the ON keyword and protocol if it exists, gives the physical pins of the device we are using to run the test code
+	# A conversion function: preceded by the USING keyword, provides a math function which will be used to convert all inputs/outputs to/from this hardware
+
+	BK2194 NAMED scope ON usb com4 # Part ID of a B&K oscilliscope
+	SDM3045X NAMED multimeter ON usb com5 # Part id of a Siglent Technologies digital multimeter
+	GPO NAMED trig_pulse ON DIGITAL 3
+	GPI NAMED pulse ON ANALOG 5 USING convert_pulse
+END
+
+
+# On keyword outside of a definition (like a hardware defenition) declares a function that will run only when one of a few predefined events occur
+# In this case the FAILURE event is used, which means the code in this block only runs when a (default) assertion anywhere in the code fails
+# This is usefull if you want to take certain actions, like powering down the hardware, if the tests fail
+# COMPLETE keyword is also provided to run code when the all tests have finished and passed
+ON FAILURE:
+	SET trig_pulse LOW
+END
+
+
+# Values which can only be assigned once and never again
+# All constants and variables are assumed to be floating point numbers
+CONSTANT Eo = 1.5
+CONSTANT alpha = 0.015
+CONSTANT beta = 0.0056
+
+
+# Single-Input functions which evaluate a mathematical equation at the given point
+MATHFUNC convert_pulse (raw) = raw*(3.3/(212))/100/0.05*1000
+MATHFUNC pulse_func (t) = Eo*(exp(0-alpha*t) - exp(0-beta*t))
+
+
+# An always block will run in a loop for the entire duration of the test
+# The @ symbol is used to specify the period in ms after which the block execution repeats
+# The @ symbol is optional and defaults to a period of 100 ms
+ALWAYS @100:
+	# Labels allow the renaming of package library functions for a specific hardware
+	# In this case, we are creating a label called "vA", which every time it is referenced will make a call to the VOLTAGE function of the multimeter hardware defined earlier
+	LABEL vA multimeter VOLTAGE
+	
+	# Asserts allow us to test certain assumptions an always returns either a Pass or Fail
+	# If any (standard) assertion fails at any point the whole test fails and the program immediately halts (after running the FAILURE event code if defined)
+	# Every hardware definition has the following
+	# A variable: the first parameter which is the thing whose value you want to check
+	# A comparison: either EQUAL GREATERTHEN & LESSTHEN to check a single value, or MATCHES to check an array of values
+	# A golden value: the value you want to compare the input against
+	# A tolerance: preceded by the TOLERANCE keyword, an optional value specifying a range for which the test will pass if un-exact matches are acceptable. percent or absolute values accepted
+	# Logical operators: any number of AND, OR keywords combining multiple assertion checks into a single check
+
+	ASSERT vA EQUAL 3.3V TOLERANCE 5%
+
+	# The WEAK keyword after assert means that if this check fails, a warning will be logged but the test will not halt
+	ASSERT WEAK multimeter CURRENT GREATERTHEN 10mA AND LESSTHEN 600mA TOLERANCE 10mA
+END
+
+
+# Sets the value of a hardware output to a given value. For GPIOs the LOW and HIGH keyword are provided for verbosity
+SET trig_pulse HIGH
+
+# Like an ASSERT but instead of failing, it will hold the programs evecution here in a busy-wait fashion until the stament evaluates to true
+DELAY UNTIL pulse GREATERTHEN 100
+
+# Record will continue to read an input and store it into an array for a given time
+# Every record definition has the following
+# callfunc: the function to call to retreive a value, usually from the hardware definition
+# period: preceded by the EVERY keyword, the period between calls to the callfunc
+# new variable: preceded by the AS keyword, the name of the array to store the results in
+# duration: preceded by the FOR keyword, the length of time to accumulate values into the array
+RECORD pulse EVERY 10ms AS pulse_in FOR 300 ms
+
+
+ASSERT pulse_in MATCHES pulse_func TOLERANCE 10%
+
+# At the end of the file, the COMPLETE event will be triggered before the test terminates

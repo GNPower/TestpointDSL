@@ -1,0 +1,2 @@
+CONSTANT beta = 0.0056-alpha*t
+CONTEXT NAME = Some Testing Plan Name Here

@@ -100,7 +100,7 @@ double DynamicTimeWarping(double * y1, double * y2, unsigned int ylength)
     unsigned int i, j;
     unsigned int mat_l = ylength + 1;
     // Initialize cost matrix
-    double * cost_matrix = malloc(mat_l * mat_l * sizeof(double));
+    double * cost_matrix = (double *) malloc(mat_l * mat_l * sizeof(double));
     for (i = 0; i < mat_l; i++)
     {
         for (j = 0; j < mat_l; j++)
@@ -169,7 +169,7 @@ double DynamicTimeWarping_1(double * y1, double * y2, unsigned int ylength)
     unsigned int i, j;
     unsigned int mat_l = ylength + 1;
     // Initialize cost matrix
-    double * cost_matrix = malloc(mat_l * mat_l * sizeof(double));
+    double * cost_matrix = (double *) malloc(mat_l * mat_l * sizeof(double));
     for (i = 0; i < mat_l; i++)
     {
         for (j = 0; j < mat_l; j++)
@@ -239,7 +239,7 @@ double DynamicTimeWarping_2(double * y1, double * y2, unsigned int ylength)
     unsigned int i, j;
     unsigned int mat_l = ylength + 1;
     // Initialize cost matrix
-    float * cost_matrix = malloc(mat_l * mat_l * sizeof(float));
+    float * cost_matrix = (float *) malloc(mat_l * mat_l * sizeof(float));
     for (i = 0; i < mat_l; i++)
     {
         for (j = 0; j < mat_l; j++)
@@ -309,7 +309,7 @@ double DynamicTimeWarping_3(double * y1, double * y2, unsigned int ylength)
     unsigned int i, j;
     unsigned int mat_l = ylength + 1;
     // Initialize cost matrix
-    double * cost_matrix = malloc(mat_l * mat_l * sizeof(double));
+    double * cost_matrix = (double *) malloc(mat_l * mat_l * sizeof(double));
     for (i = 1; i < mat_l; i++)
     {
         cost_matrix[(0)*mat_l + i] = DBL_MAX;
@@ -391,7 +391,7 @@ double DynamicTimeWarping_5(double * y1, double * y2, unsigned int ylength)
     unsigned int i, j;
     unsigned int mat_l = ylength + 1;
     // Initialize cost matrix
-    double * cost_matrix = malloc(mat_l * mat_l * sizeof(double));
+    double * cost_matrix = (double *) malloc(mat_l * mat_l * sizeof(double));
     for (i = 0; i < mat_l; i++)
     {
         for (j = 0; j < mat_l; j++)
@@ -461,7 +461,7 @@ double DynamicTimeWarping_6(double * y1, double * y2, unsigned int ylength)
     unsigned int i, j;
     unsigned int mat_l = ylength + 1;
     // Initialize cost matrix
-    double * cost_matrix = malloc(mat_l * mat_l * sizeof(double));
+    double * cost_matrix = (double *) malloc(mat_l * mat_l * sizeof(double));
     for (i = 0; i < mat_l; i++)
     {
         for (j = 0; j < mat_l; j++)
@@ -532,7 +532,7 @@ double DynamicTimeWarping_123(double * y1, double * y2, unsigned int ylength)
     unsigned int i, j;
     unsigned int mat_l = ylength + 1;
     // Initialize cost matrix
-    float * cost_matrix = malloc(mat_l * mat_l * sizeof(float));
+    float * cost_matrix = (float *) malloc(mat_l * mat_l * sizeof(float));
     for (i = 1; i < mat_l; i++)
     {
         cost_matrix[(0)*mat_l + i] = FLT_MAX;
@@ -600,7 +600,7 @@ double DynamicTimeWarping_236(double * y1, double * y2, unsigned int ylength)
     unsigned int i, j;
     unsigned int mat_l = ylength + 1;
     // Initialize cost matrix
-    float * cost_matrix = malloc(mat_l * mat_l * sizeof(float));
+    float * cost_matrix = (float *) malloc(mat_l * mat_l * sizeof(float));
     for (i = 1; i < mat_l; i++)
     {
         cost_matrix[(0)*mat_l + i] = FLT_MAX;
@@ -662,15 +662,32 @@ double DynamicTimeWarping_236(double * y1, double * y2, unsigned int ylength)
     return cost;
 };
 
-// DynamicTimeWarping  : Original
-// DynamicTimeWarping_1: Swapped for loops
-// DynamicTimeWarping_2: Reduce double bit width
-// DynamicTimeWarping_3: Initialize loop not completely needed
-// DynamicTimeWarping_5: Store matrix row/column interleaved
-// DynamicTimeWarping_6: Limit warping
+// ✓ DynamicTimeWarping  : Original
+// ✓ DynamicTimeWarping_1: Swapped for loops
+// ✓ DynamicTimeWarping_2: Reduce double bit width
+// ✓ DynamicTimeWarping_3: Initialize loop not completely needed
+// ✓ DynamicTimeWarping_6: Limit warping
 // TODO:
+// (unknown benefit https://www.cs.unm.edu/~mueen/DTW.pdf)
+// DynamicTimeWarping_#: Memoization ??
 // DynamicTimeWarping_4: Multithread row and column
-// DynamicTimeWarping_6: Multithread row and column by blocks
+// DynamicTimeWarping_5: Store matrix row/column interleaved
+// DynamicTimeWarping_5: Multithread diagonal
+// DynamicTimeWarping_5: Store matrix by diagonal rows
+// (tempo c++)
+// DynamicTimeWarping_7: Early Abandoned
+// DynamicTimeWarping_8: Pruned
+// DynamicTimeWarping_9: LB_Keogh
+// DynamicTimeWarping_10: LB_Enhanced
+// DynamicTimeWarping_11: LB_Webb
+// (UltraFastMP java)
+// DynamicTimeWarping_12: Fast Warping ?? 
+// (lbimproved c++)
+// DynamicTimeWarping_13: fast nearest negihbor retrieval
+// (fastdtw java)
+// DynamicTimeWarping_14: Fast DTW ??
+
+// DynamicTimeWarping_#: Multithread row and column by blocks
 
 #define NUM_IMPLEMENTATIONS     8
 #define MONTECARLO_RUNS         10

@@ -255,30 +255,20 @@ class InvertingExponentialPulse(Signal):
             self, 
             is_neg: bool = False,
             E0: float = 10,
-            alpha: float = 0.3,
-            beta_over_alpha: float = 1.001,
-            pulse2_delay = 10,
-            pulse2_rel_E0 = 0.5,
+            pulse_delay = 10,
+            pulse_width = 15,
             length: int = 100, 
             stride: float = 0.1
         ) -> None:
         super().__init__(length, stride)
         self.is_neg = is_neg
         self.E0 = E0
-        self.alpha = alpha
-        self.beta_over_alpha = beta_over_alpha
-        self.beta = alpha * beta_over_alpha
-        self.pulse2_delay = pulse2_delay
-        self.pulse2_rel_E0 = pulse2_rel_E0
-        self.k = exp(-alpha * ( (log(alpha) - log(self.beta)) / (alpha - self.beta) )) - exp(-self.beta * ((log(alpha) - log(self.beta)) / (alpha - self.beta) ))
+        self.pulse_delay = pulse_delay
+        self.pulse_width = pulse_width
 
     def evaluate(self, x: float):
         val = (
-            self.E0*self.k*(exp(-self.alpha*x) - exp(-self.beta*x))
-            - (
-                ( 1 / (1 + exp(-0.75*(x-self.pulse2_delay))) )
-                *2*self.pulse2_rel_E0*self.E0*self.k*(exp(-self.alpha*(x-self.pulse2_delay)) - exp(-self.beta*(x-self.pulse2_delay)))
-            )
+            self.E0*((x-self.pulse_delay)/(self.pulse_width))*exp( -6*pi * (((x-self.pulse_delay)/(self.pulse_width))**2) )
         )
         if self.is_neg:
             return 0 - val
@@ -348,8 +338,7 @@ class SpikePulse(Signal):
             E0: float = 10,
             alpha: float = 1,
             beta_over_alpha: float = 4,
-            pulse2_delay = 10,
-            pulse2_rel_E0 = 0.5,
+            pulse_delay = 10,
             length: int = 100, 
             stride: float = 0.1
         ) -> None:
@@ -359,7 +348,7 @@ class SpikePulse(Signal):
         self.alpha = alpha
         self.beta_over_alpha = beta_over_alpha
         self.beta = alpha * beta_over_alpha
-        self.pulse_delay = pulse2_delay
+        self.pulse_delay = pulse_delay
         self.k = exp(-alpha * ( (log(alpha) - log(self.beta)) / (alpha - self.beta) )) - exp(-self.beta * ((log(alpha) - log(self.beta)) / (alpha - self.beta) ))
 
     def evaluate(self, x: float):

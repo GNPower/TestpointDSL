@@ -1,0 +1,78 @@
+Program(
+	body: [
+		VaribaleDeclaration(
+			identifier: beta,
+			constant: True,
+			value: BinaryExpression(
+				left: NumericLiteral( value: 0.0056 ),
+				right: BinaryExpression(
+					left: Identifier( symbol: "alpha" ),
+					right: Identifier( symbol: "t" ),
+					operator: *
+				),
+				operator: -
+			)
+		),
+		AssignmentExpression(
+			assignee: ContextIdentifier( symbol: "CONTEXT.NAME" ),
+			value: StringArrayLiteral( value: ['Some', 'Testing', 'Plan', 'Name', 'Here'] )
+		),
+		ObjectLiteral(
+			properties: [
+				Property(
+					key: name,
+					value: Token(
+						type: TokenType.IDENTIFIER,
+						value: "trig_pulse"
+					)
+				),
+				Property(
+					key: on_port,
+					value: Token(
+						type: TokenType.IDENTIFIER,
+						value: "DIGITAL"
+					)
+				),
+				Property(
+					key: port_num,
+					value: Token(
+						type: TokenType.NUMBER,
+						value: "3"
+					)
+				),
+			]
+		),
+		ObjectLiteral(
+			properties: [
+				Property(
+					key: name,
+					value: Token(
+						type: TokenType.IDENTIFIER,
+						value: "pulse"
+					)
+				),
+				Property(
+					key: on_port,
+					value: Token(
+						type: TokenType.IDENTIFIER,
+						value: "ANALOG"
+					)
+				),
+				Property(
+					key: port_num,
+					value: Token(
+						type: TokenType.NUMBER,
+						value: "5"
+					)
+				),
+				Property(
+					key: using,
+					value: Token(
+						type: TokenType.IDENTIFIER,
+						value: "convert_pulse"
+					)
+				),
+			]
+		),
+	]
+)
